@@ -2,16 +2,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:zanatlija_app/navigation/routes.dart';
 import 'package:zanatlija_app/utils/app_mixin.dart';
+import 'package:zanatlija_app/utils/common_widgets.dart';
 
 @RoutePage()
-class Splash extends StatefulWidget {
-  const Splash({super.key});
+class InitialPage extends StatefulWidget {
+  const InitialPage({super.key});
 
   @override
-  State<Splash> createState() => _SplashState();
+  State<InitialPage> createState() => _InitialPageState();
 }
 
-class _SplashState extends State<Splash> with AppMixin {
+class _InitialPageState extends State<InitialPage> with AppMixin {
   bool _showSplashLogo = true;
 
   @override
@@ -50,17 +51,20 @@ class _StartingWidget extends StatelessWidget {
         fontSize: 36,
       );
 
-  Widget _buildTextRow(BuildContext context,
-      {required String leftText,
-      required String rightText,
-      bool? isPrimaryColorDark}) {
+  Widget _buildTextRow(
+    BuildContext context, {
+    required String leftText,
+    required String rightText,
+    bool? isPrimaryColorDark,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Row(
         children: [
           Text(
             leftText,
-            style: _getRowTextStyle().copyWith(color: Colors.black),
+            style: _getRowTextStyle()
+                .copyWith(color: Colors.black, fontWeight: FontWeight.w600),
           ),
           const SizedBox(
             width: 10,
@@ -113,29 +117,10 @@ class _StartingWidget extends StatelessWidget {
                 ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                AutoRouter.of(context).replaceNamed(kLoginRoute);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).cardColor,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                foregroundColor: Colors.white,
-                textStyle: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w500,
-                ),
-              ).copyWith(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        20), // Change this value to control the radius
-                  ),
-                ),
-              ),
-              child: const Text('Započni pretragu'),
-            ),
+            CommonActionButton(
+                onAction: () =>
+                    AutoRouter.of(context).replaceNamed(kLoginRoute),
+                title: 'Započni pretragu')
           ],
         ),
       ),

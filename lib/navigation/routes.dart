@@ -1,2 +1,3 @@
-const kSplashRoute = '/';
-const kLoginRoute = 'login';
+const kInitialRoute = '/';
+const kLoginRoute = '/login';
+const kRegistrationRoute = '/registration';

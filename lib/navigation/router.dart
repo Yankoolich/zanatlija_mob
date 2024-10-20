@@ -10,8 +10,17 @@ class AppRouter extends $AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(
-          page: Splash.page,
-          path: kSplashRoute,
+          page: InitialRoute.page,
+          path: kInitialRoute,
+          initial: true,
+        ),
+        AutoRoute(
+          page: LoginRoute.page,
+          path: kLoginRoute,
+        ),
+        AutoRoute(
+          page: RegistrationRoute.page,
+          path: kRegistrationRoute,
         ),
       ];
 }
