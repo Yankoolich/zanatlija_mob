@@ -1,10 +1,14 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto/crypto.dart';
 import 'package:zanatlija_app/entities/login/models/user.dart';
+import 'package:zanatlija_app/utils/app_mixin.dart';
 
-class FirestoreService {
+enum LoginError {
+  userNotFound,
+  passwordIsWrong,
+  unknownError,
+}
+
+class FirestoreService with AppMixin {
   final FirebaseFirestore firebaseFirestoreInstance;
   FirestoreService(this.firebaseFirestoreInstance);
   final kUserCollection = 'users';
@@ -17,25 +21,23 @@ class FirestoreService {
         .set(user.toJson());
   }
 
-  Future<bool> login(String email, String password) async {
+  Future<LoginError?> login(String phoneNumber, String password) async {
     try {
-      final hashedPassword = _hashPassword(password);
-      DocumentSnapshot userDoc =
-          await firebaseFirestoreInstance.collection('users').doc(email).get();
+      final hashedPassword = getHashedPassword(password);
+      final userDoc = await firebaseFirestoreInstance
+          .collection(kUserCollection)
+          .doc(phoneNumber)
+          .get();
       if (userDoc.exists) {
         if (userDoc['password'] == hashedPassword) {
-          return true;
+          return null;
+        } else {
+          return LoginError.passwordIsWrong;
         }
       }
-      return false;
+      return LoginError.userNotFound;
     } catch (e) {
-      return false;
+      return LoginError.unknownError;
     }
-  }
-
-  String _hashPassword(String password) {
-    final bytes = utf8.encode(password);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
   }
 }

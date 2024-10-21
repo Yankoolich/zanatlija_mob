@@ -3,7 +3,7 @@ class User {
   final int birthDateInMillis;
   final String location;
   final String email;
-  final int phoneNumber;
+  final String phoneNumber;
   final String password;
 
   const User({

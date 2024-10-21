@@ -22,5 +22,9 @@ class AppRouter extends $AppRouter {
           page: RegistrationRoute.page,
           path: kRegistrationRoute,
         ),
+        AutoRoute(
+          page: HomeRoute.page,
+          path: kHomeRoute,
+        ),
       ];
 }

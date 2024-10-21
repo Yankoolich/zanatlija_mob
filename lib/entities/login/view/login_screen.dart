@@ -1,7 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zanatlija_app/entities/login/bloc/bloc/user_bloc.dart';
 import 'package:zanatlija_app/navigation/routes.dart';
+import 'package:zanatlija_app/utils/app_mixin.dart';
 import 'package:zanatlija_app/utils/common_widgets.dart';
+import 'package:zanatlija_app/utils/validator.dart';
 
 @RoutePage()
 class LoginPage extends StatefulWidget {
@@ -11,7 +15,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with AppMixin {
   final TextEditingController _emailPhoneNumberController =
       TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -43,8 +47,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Column(
               children: [
-                CommonTextField(
-                    'Email ili broj telefona', _emailPhoneNumberController),
+                CommonTextField('Broj telefona', _emailPhoneNumberController),
                 CommonTextField(
                   'Sifra',
                   _passwordController,
@@ -56,15 +59,28 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
             CommonActionButton(
-              title: 'Prijavi se',
-              onAction: () {},
-            ),
+                title: 'Prijavi se',
+                onAction: () {
+                  if (!isPhoneNumberValid(_emailPhoneNumberController.text)) {
+                    showSnackbarWithTitle(
+                        'Unesite validan broj telefona', context);
+                    return;
+                  } else if (_passwordController.text.isEmpty) {
+                    showSnackbarWithTitle('Sifra ne sme biti prazna', context);
+                    return;
+                  } else if (_passwordController.text.length <= 5) {
+                    showSnackbarWithTitle('Sifra je prekratka', context);
+                    return;
+                  }
+                  BlocProvider.of<UserBloc>(context).add(LoginUserEvent(context,
+                      phoneNumber: _emailPhoneNumberController.text,
+                      password: _passwordController.text));
+                }),
             const SizedBox(
               height: 20,
             ),
             InkWell(
-              onTap: () =>
-                  AutoRouter.of(context).replaceNamed(kRegistrationRoute),
+              onTap: () => AutoRouter.of(context).pushNamed(kRegistrationRoute),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,

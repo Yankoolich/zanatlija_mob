@@ -11,3 +11,17 @@ class CreateUserEvent extends UserEvent {
   @override
   List<Object?> get props => [user];
 }
+
+class LoginUserEvent extends UserEvent {
+  final BuildContext context;
+  final String phoneNumber;
+  final String password;
+  LoginUserEvent(
+    this.context, {
+    required this.phoneNumber,
+    required this.password,
+  });
+
+  @override
+  List<Object?> get props => [context, phoneNumber, password];
+}

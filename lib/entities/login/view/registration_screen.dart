@@ -1,15 +1,13 @@
-import 'dart:convert';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:zanatlija_app/entities/login/bloc/bloc/user_bloc.dart';
 import 'package:zanatlija_app/entities/login/models/user.dart';
-import 'package:zanatlija_app/navigation/routes.dart';
+import 'package:zanatlija_app/utils/app_mixin.dart';
 import 'package:zanatlija_app/utils/common_widgets.dart';
 import 'package:zanatlija_app/utils/locations.dart';
+import 'package:zanatlija_app/utils/validator.dart';
 
 @RoutePage()
 class RegistrationPage extends StatefulWidget {
@@ -19,7 +17,7 @@ class RegistrationPage extends StatefulWidget {
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationPageState extends State<RegistrationPage> with AppMixin {
   final TextEditingController _nameSurnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
@@ -40,17 +38,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void _onRegistrationAction() {
     if (_nameSurnameController.text.isEmpty ||
-        _emailController.text.isEmpty ||
-        _locationController.text.isEmpty ||
-        _phoneController.text.isEmpty ||
-        _dateController.text.isEmpty ||
-        _passwordController.text.isEmpty) {
+        !isValidFullname(_nameSurnameController.text)) {
+      showSnackbarWithTitle('Unesite validno ime i prezime', context);
+      return;
+    } else if (_dateController.text.isEmpty) {
+      showSnackbarWithTitle('Unesite validan datum rodjenja', context);
+      return;
+    } else if (_locationController.text.isEmpty) {
+      showSnackbarWithTitle('Izaberite validnu lokaciju', context);
+      return;
+    } else if (_emailController.text.isEmpty ||
+        !isEmailValid(_emailController.text)) {
+      showSnackbarWithTitle('Unesite validnu email adresu', context);
+      return;
+    } else if (_phoneController.text.isEmpty ||
+        !isPhoneNumberValid(_phoneController.text)) {
+      showSnackbarWithTitle('Unesite validan broj telefona', context);
+      return;
+    } else if (_passwordController.text.isEmpty) {
+      showSnackbarWithTitle('Sifra ne sme biti prazna', context);
+      return;
+    } else if (_passwordController.text.length <= 5) {
+      showSnackbarWithTitle('Sifra je prekratka', context);
       return;
     }
-    final bytes =
-        utf8.encode(_passwordController.text); // Convert the password to bytes
-    final digest = sha256.convert(bytes); // Hash the bytes
-    final password = digest.toString();
+    final password = getHashedPassword(_passwordController.text);
     final user = User(
         nameSurname: _nameSurnameController.text,
         birthDateInMillis: DateFormat('dd/MM/yyyy')
@@ -59,9 +71,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         email: _emailController.text,
         location: _locationController.text,
         password: password,
-        phoneNumber: int.parse(_phoneController.text));
+        phoneNumber: _phoneController.text);
     BlocProvider.of<UserBloc>(context).add(CreateUserEvent(user));
-    AutoRouter.of(context).replaceNamed(kLoginRoute);
+    AutoRouter.of(context).maybePop();
   }
 
   @override

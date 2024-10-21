@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,6 +13,16 @@ mixin AppMixin<T extends StatefulWidget> {
 
   Future<void> wait(Duration duration) async {
     await Future.delayed(duration);
+  }
+
+  void showSnackbarWithTitle(String title, BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(title)));
+  }
+
+  String getHashedPassword(String text) {
+    final bytes = utf8.encode(text);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   Widget animatedChildSwitcher({
