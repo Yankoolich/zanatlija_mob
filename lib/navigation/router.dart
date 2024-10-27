@@ -26,5 +26,13 @@ class AppRouter extends $AppRouter {
           page: HomeRoute.page,
           path: kHomeRoute,
         ),
+        AutoRoute(
+          page: AddCraft.page,
+          path: kAddCraftRoute,
+        ),
+        AutoRoute(
+          page: ViewCraft.page,
+          path: kViewCraftRoute,
+        ),
       ];
 }

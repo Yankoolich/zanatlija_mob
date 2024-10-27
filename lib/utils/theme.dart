@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const String fontFamily = 'Montserrat';
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
+  primaryColor: const Color(0xff2E36FF),
   primaryColorDark: const Color(0xff2E36FF),
   primaryColorLight: const Color(0xffFF9F2E),
   backgroundColor: const Color(0xffF3F3F3),

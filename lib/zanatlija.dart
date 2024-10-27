@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zanatlija_app/entities/login/bloc/bloc/user_bloc.dart';
+import 'package:zanatlija_app/entities/home/bloc/craft_cubit.dart';
+import 'package:zanatlija_app/entities/login/bloc/user_bloc.dart';
 import 'package:zanatlija_app/navigation/router.dart';
 import 'package:zanatlija_app/utils/app_mixin.dart';
 import 'package:zanatlija_app/utils/theme.dart';
@@ -27,6 +28,7 @@ class _ZanatlijaAppState extends State<ZanatlijaApp> with AppMixin {
           return MultiBlocProvider(
             providers: [
               BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
+              BlocProvider.value(value: BlocProvider.of<CraftCubit>(context)),
             ],
             child: child!,
           );

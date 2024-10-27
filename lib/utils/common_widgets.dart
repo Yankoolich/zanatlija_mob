@@ -1,23 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CommonActionButton extends StatelessWidget {
   final String title;
   final VoidCallback onAction;
+  final Color? customColor;
   const CommonActionButton(
-      {required this.onAction, required this.title, super.key});
+      {required this.onAction,
+      this.customColor,
+      required this.title,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.of(context).size.width * 0.8,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: onAction,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).cardColor,
+            backgroundColor: customColor ?? Theme.of(context).cardColor,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             foregroundColor: Colors.white,
             textStyle: const TextStyle(
@@ -41,18 +46,24 @@ class CommonTextField extends StatefulWidget {
   final TextEditingController controller;
   final bool obscureText;
   final bool isDatePicker;
-  final TextInputType keyboardType; // New parameter for input type
-  final List<String> locations; // New parameter for locations
-  final bool disableCopyPaste; // New parameter to disable copy and paste
+  final bool isPriceText;
+  final TextInputType keyboardType;
+  final List<String> locations;
+  final bool disableCopyPaste;
+  final bool isRichText;
+  final bool isImagePicker; // New parameter
 
   const CommonTextField(
     this.title,
     this.controller, {
     this.obscureText = false,
     this.isDatePicker = false,
-    this.keyboardType = TextInputType.text, // Default is text
-    this.locations = const [], // Default to an empty list
-    this.disableCopyPaste = false, // Default is false
+    this.keyboardType = TextInputType.text,
+    this.locations = const [],
+    this.disableCopyPaste = false,
+    this.isPriceText = false,
+    this.isRichText = false,
+    this.isImagePicker = false, // New parameter
     super.key,
   });
 
@@ -108,10 +119,21 @@ class _CommonTextFieldState extends State<CommonTextField> {
     });
   }
 
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        widget.controller.text =
+            image.path; // Save image path or handle as needed
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.9,
+      width: MediaQuery.of(context).size.width * 0.935,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
@@ -120,9 +142,13 @@ class _CommonTextFieldState extends State<CommonTextField> {
           textAlign: TextAlign.justify,
           keyboardType: widget.keyboardType,
           readOnly: widget.disableCopyPaste,
+          maxLines: widget.obscureText ? 1 : null,
+          minLines: widget.isRichText ? 4 : 1,
           onTap: () {
             if (widget.disableCopyPaste) {
               FocusScope.of(context).requestFocus(FocusNode());
+            } else if (widget.isImagePicker) {
+              _pickImage(); // Trigger image picker
             }
           },
           decoration: InputDecoration(
@@ -150,55 +176,60 @@ class _CommonTextFieldState extends State<CommonTextField> {
                         color: Colors.grey),
                     onPressed: () => _selectDate(context),
                   )
-                : (widget.obscureText
+                : widget.isPriceText
                     ? IconButton(
-                        icon: Icon(
-                          shouldObscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _isObscured = !_isObscured;
-                          });
-                        },
+                        icon: const Icon(Icons.euro, color: Colors.grey),
+                        onPressed: () {},
                       )
-                    : widget.locations.isNotEmpty
+                    : (widget.obscureText
                         ? IconButton(
-                            icon: const Icon(Icons.arrow_drop_down,
-                                color: Colors.grey),
+                            icon: Icon(
+                              shouldObscureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
                             onPressed: () {
-                              // Show the dropdown
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Select Location'),
-                                    content: SingleChildScrollView(
-                                      child: ListBody(
-                                        children:
-                                            widget.locations.map((location) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              _selectLocation(location);
-                                              Navigator.pop(context);
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(location),
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
                             },
                           )
-                        : null),
+                        : widget.locations.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Colors.grey),
+                                onPressed: () {
+                                  // Show the dropdown
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Select option'),
+                                        content: SingleChildScrollView(
+                                          child: ListBody(
+                                            children: widget.locations
+                                                .map((location) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  _selectLocation(location);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(location),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              )
+                            : null),
           ),
           style: const TextStyle(
             fontSize: 25,

@@ -43,6 +43,8 @@ dependencies:
   intl: ^0.19.0
   equatable: ^2.0.5
   crypto:
+  image_picker:
+  firebase_storage: ^11.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -2,11 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:zanatlija_app/entities/login/bloc/bloc/user_bloc.dart';
-import 'package:zanatlija_app/entities/login/models/user.dart';
+import 'package:zanatlija_app/entities/login/bloc/user_bloc.dart';
+import 'package:zanatlija_app/data/models/user.dart';
 import 'package:zanatlija_app/utils/app_mixin.dart';
 import 'package:zanatlija_app/utils/common_widgets.dart';
-import 'package:zanatlija_app/utils/locations.dart';
+import 'package:zanatlija_app/utils/constants.dart';
 import 'package:zanatlija_app/utils/validator.dart';
 
 @RoutePage()
@@ -90,13 +90,20 @@ class _RegistrationPageState extends State<RegistrationPage> with AppMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Text(
+                  'Popuni profil',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 43),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Image.asset(
                   'assets/userProfile.png',
                   height: MediaQuery.of(context).size.height * 0.1,
                   width: MediaQuery.of(context).size.height * 0.1,
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zanatlija_app/entities/login/bloc/bloc/user_bloc.dart';
+import 'package:zanatlija_app/entities/login/bloc/user_bloc.dart';
 import 'package:zanatlija_app/navigation/routes.dart';
 import 'package:zanatlija_app/utils/app_mixin.dart';
 import 'package:zanatlija_app/utils/common_widgets.dart';

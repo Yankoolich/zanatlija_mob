@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:zanatlija_app/entities/login/models/user.dart';
+import 'package:zanatlija_app/data/models/craft.dart';
+import 'package:zanatlija_app/data/models/user.dart';
 import 'package:zanatlija_app/utils/app_mixin.dart';
 
 enum LoginError {
@@ -9,35 +10,66 @@ enum LoginError {
 }
 
 class FirestoreService with AppMixin {
-  final FirebaseFirestore firebaseFirestoreInstance;
-  FirestoreService(this.firebaseFirestoreInstance);
+  final FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+
   final kUserCollection = 'users';
+  final kCraftCollection = 'crafts';
 
   Future<void> createUser(User user) async {
-    final collectionReference =
-        firebaseFirestoreInstance.collection(kUserCollection);
-    await collectionReference
-        .doc(user.phoneNumber.toString())
-        .set(user.toJson());
+    final collectionReference = firestoreInstance.collection(kUserCollection);
+    await collectionReference.doc(user.phoneNumber).set(user.toJson());
   }
 
-  Future<LoginError?> login(String phoneNumber, String password) async {
+  Future<List<Craft>> getAllCrafts(User user) async {
+    List<Craft> crafts = [];
+    try {
+      final collectionReference =
+          firestoreInstance.collection(kCraftCollection);
+      final data = await collectionReference.get();
+
+      for (final doc
+          in data.docs.where((e) => e.id != user.phoneNumber).toList()) {
+        crafts.add(Craft.fromJson(doc.data()));
+      }
+      return crafts;
+    } catch (error) {
+      return crafts;
+    }
+  }
+
+  Future<User?> login(String phoneNumber, String password) async {
     try {
       final hashedPassword = getHashedPassword(password);
-      final userDoc = await firebaseFirestoreInstance
+      final userDoc = await firestoreInstance
           .collection(kUserCollection)
           .doc(phoneNumber)
           .get();
+
       if (userDoc.exists) {
         if (userDoc['password'] == hashedPassword) {
-          return null;
+          return User.fromJson(userDoc.data()!);
         } else {
-          return LoginError.passwordIsWrong;
+          throw LoginError.passwordIsWrong;
         }
       }
-      return LoginError.userNotFound;
+      throw LoginError.userNotFound;
     } catch (e) {
-      return LoginError.unknownError;
+      throw LoginError.unknownError;
     }
+  }
+
+  Future<void> addCraftToUser(Craft craft, User user) async {
+    try {
+      final userCollectionReference =
+          firestoreInstance.collection(kUserCollection);
+      final craftCollectionReference =
+          firestoreInstance.collection(kCraftCollection);
+
+      user.myJobs?.add(craft);
+      await Future.wait([
+        userCollectionReference.doc(user.phoneNumber).update(user.toJson()),
+        craftCollectionReference.doc().set(craft.toJson())
+      ]);
+    } catch (error) {}
   }
 }
