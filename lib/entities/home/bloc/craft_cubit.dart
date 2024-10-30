@@ -25,7 +25,7 @@ class CraftCubit extends Cubit<CraftState> {
 
       emit(CraftDownloadSuccess(crafts));
     } catch (e) {
-      emit(CraftDownloadError(e.toString()));
+      emit(CraftStateError(e.toString()));
     }
   }
 
@@ -37,10 +37,10 @@ class CraftCubit extends Cubit<CraftState> {
         emit(const CraftUploadErrorState('Error uploading image to storage'));
         throw 'Error in uploading image';
       }
-      emit(CraftUploadedSuccess());
+      emit(CrafStateSuccess());
       return image;
     } catch (e) {
-      emit(CraftUploadErrorState(e.toString()));
+      emit(CraftStateError(e.toString()));
       return null;
     }
   }
@@ -48,7 +48,7 @@ class CraftCubit extends Cubit<CraftState> {
   Future<void> addNewJob(Craft craft, User user) async {
     emit(CraftLoadingState());
     try {
-      await firestoreService.addCraftToUser(craft, user);
+      await firestoreService.addCraft(craft, user);
       emit(CrafAddNewJobSuccess());
     } catch (e) {
       debugPrint('Error $e');

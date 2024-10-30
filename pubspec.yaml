@@ -45,6 +45,8 @@ dependencies:
   crypto:
   image_picker:
   firebase_storage: ^11.2.1
+  chat_bubbles: ^1.6.0
+  shared_preferences: ^2.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

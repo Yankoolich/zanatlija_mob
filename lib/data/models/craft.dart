@@ -7,6 +7,8 @@ enum CraftCategory {
 }
 
 class Craft {
+  final String id;
+  final String userId;
   final String craftsmanName;
   final String craftName;
   final String location;
@@ -16,6 +18,8 @@ class Craft {
   final double? rate;
 
   Craft({
+    required this.userId,
+    required this.id,
     required this.craftsmanName,
     required this.craftName,
     required this.description,
@@ -26,6 +30,8 @@ class Craft {
   });
 
   factory Craft.fromJson(Map<String, dynamic> json) => Craft(
+        id: json['id'],
+        userId: json['userId'],
         craftsmanName: json['craftsmanName'],
         craftName: json['craftName'],
         location: json['location'],
@@ -36,6 +42,8 @@ class Craft {
       );
 
   Map<String, dynamic> toJson() => {
+        'id': id,
+        'userId': userId,
         'craftsmanName': craftsmanName,
         'craftName': craftName,
         'location': location,

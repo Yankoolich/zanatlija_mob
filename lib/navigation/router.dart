@@ -34,5 +34,9 @@ class AppRouter extends $AppRouter {
           page: ViewCraft.page,
           path: kViewCraftRoute,
         ),
+        AutoRoute(
+          page: ChatRoom.page,
+          path: kChatRoomRoute,
+        ),
       ];
 }

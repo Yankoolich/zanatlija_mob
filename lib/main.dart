@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:zanatlija_app/data/services/firestore_service.dart';
 import 'package:zanatlija_app/data/services/storage_service.dart';
+import 'package:zanatlija_app/entities/home/bloc/chat_bloc.dart';
 import 'package:zanatlija_app/entities/home/bloc/craft_cubit.dart';
 import 'package:zanatlija_app/entities/login/bloc/user_bloc.dart';
+import 'package:zanatlija_app/utils/user_preferences.dart';
 import 'package:zanatlija_app/zanatlija.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,11 +22,13 @@ Future<void> main() async {
     ),
   );
   await initializeDateFormatting('sr_RS', null);
+  await UserPreferences.instance.init();
   final StorageService storageService = StorageService();
   final FirestoreService firestoreService = FirestoreService();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<UserBloc>(create: (_) => UserBloc(firestoreService)),
+      BlocProvider<ChatBloc>(create: (_) => ChatBloc(firestoreService)),
       BlocProvider<CraftCubit>(
         create: (_) => CraftCubit(
           firestoreService,

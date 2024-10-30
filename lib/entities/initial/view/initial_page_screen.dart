@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zanatlija_app/entities/login/bloc/user_bloc.dart';
 import 'package:zanatlija_app/navigation/routes.dart';
 import 'package:zanatlija_app/utils/app_mixin.dart';
 import 'package:zanatlija_app/utils/common_widgets.dart';
+import 'package:zanatlija_app/utils/user_preferences.dart';
 
 @RoutePage()
 class InitialPage extends StatefulWidget {
@@ -118,8 +121,19 @@ class _StartingWidget extends StatelessWidget {
               ],
             ),
             CommonActionButton(
-                onAction: () =>
-                    AutoRouter.of(context).replaceNamed(kLoginRoute),
+                onAction: () {
+                  String? username = UserPreferences.instance.getUsername();
+                  String? password = UserPreferences.instance.getPassword();
+
+                  if (username != null && password != null) {
+                    BlocProvider.of<UserBloc>(context).add(AutoLoginUserEvent(
+                        context,
+                        phoneNumber: username,
+                        password: password));
+                  } else {
+                    AutoRouter.of(context).replaceNamed(kLoginRoute);
+                  }
+                },
                 title: 'Započni pretragu')
           ],
         ),

@@ -2,14 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 mixin AppMixin<T extends StatefulWidget> {
   Future<void>? _dialogFuture;
-  void hideKeyboard() {
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
 
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+  void hideKeyboard(BuildContext context) {
+    FocusScope.of(context).unfocus();
   }
 
   Future<void> wait(Duration duration) async {

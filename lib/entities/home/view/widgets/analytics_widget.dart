@@ -28,90 +28,88 @@ class AnalyticsWidget extends StatelessWidget {
                 )),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Analitika',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontSize: 20,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Analitika',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '$rateNumbers',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          fontSize: 37,
+                        ),
                       ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '$rateNumbers',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                            fontSize: 37,
-                          ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Ukupno\nOcena',
+                        style: TextStyle(
+                            color: Color(0xff9A9898),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Nude zanat',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                          fontSize: 15,
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text(
-                          'Ukupno\nOcena',
-                          style: TextStyle(
-                              color: Color(0xff9A9898),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Nude zanat',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        crafts.length.toString(),
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 15,
-                          ),
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Traže zanat',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                          fontSize: 15,
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          crafts.length.toString(),
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                    const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Traže zanat',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        '0',
+                        style: TextStyle(
                             color: Colors.white,
                             fontSize: 15,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          '0',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

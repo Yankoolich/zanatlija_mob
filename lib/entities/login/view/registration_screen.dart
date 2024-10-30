@@ -24,7 +24,6 @@ class _RegistrationPageState extends State<RegistrationPage> with AppMixin {
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   @override
   void dispose() {
     _nameSurnameController.dispose();
@@ -62,6 +61,8 @@ class _RegistrationPageState extends State<RegistrationPage> with AppMixin {
       showSnackbarWithTitle('Sifra je prekratka', context);
       return;
     }
+    // final imageUrl =
+    //                           await craftCubit.uploadAndGetImageUrl(imageFile);
     final password = getHashedPassword(_passwordController.text);
     final user = User(
         nameSurname: _nameSurnameController.text,
@@ -93,14 +94,6 @@ class _RegistrationPageState extends State<RegistrationPage> with AppMixin {
                 const Text(
                   'Popuni profil',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 43),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Image.asset(
-                  'assets/userProfile.png',
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.height * 0.1,
                 ),
                 const SizedBox(
                   height: 20,
