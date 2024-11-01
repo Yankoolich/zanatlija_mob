@@ -146,21 +146,24 @@ class _ChatRoomState extends State<ChatRoom> with AppMixin {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListTile(
-                                  leading: !_isMyMessage(_chat.chatNodes[index])
-                                      ? null
-                                      : Container(
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Theme.of(context)
-                                                  .backgroundColor,
-                                              border: Border.all(width: 1)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Text(_chat.chatNodes[index]
-                                                .senderUsername[0]),
-                                          ),
-                                        ),
-                                  trailing: _isMyMessage(_chat.chatNodes[index])
+                                  trailing:
+                                      !_isMyMessage(_chat.chatNodes[index])
+                                          ? null
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Theme.of(context)
+                                                      .backgroundColor,
+                                                  border: Border.all(width: 1)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                child: Text(_chat
+                                                    .chatNodes[index]
+                                                    .senderUsername[0]),
+                                              ),
+                                            ),
+                                  leading: _isMyMessage(_chat.chatNodes[index])
                                       ? null
                                       : Container(
                                           decoration: BoxDecoration(
@@ -179,7 +182,7 @@ class _ChatRoomState extends State<ChatRoom> with AppMixin {
                                     color: const Color(0xFFE8E8EE),
                                     tail: false,
                                     isSender:
-                                        !_isMyMessage(_chat.chatNodes[index]),
+                                        _isMyMessage(_chat.chatNodes[index]),
                                   ),
                                 ),
                               );

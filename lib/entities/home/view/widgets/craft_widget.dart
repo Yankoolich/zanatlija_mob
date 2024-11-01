@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zanatlija_app/data/models/craft.dart';
 import 'package:zanatlija_app/entities/home/bloc/chat_bloc.dart';
@@ -91,13 +92,21 @@ class _CraftWidgetState extends State<CraftWidget> with AppMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(
-                                  widget.craft.craftName,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black,
-                                    fontSize:
-                                        widget.fullSize == true ? 20.5 : 17.5,
+                                Expanded(
+                                  child: SizedBox(
+                                    width: containerWidth / 1.75,
+                                    child: Text(
+                                      widget.craft.craftName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                        fontSize: widget.fullSize == true
+                                            ? 20.5
+                                            : 17.5,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Text(

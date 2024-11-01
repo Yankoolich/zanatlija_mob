@@ -669,6 +669,17 @@ class _ChatsState extends State<_Chats> with AppMixin {
         if (state is GetAllChatsForUserSuccess) {
           setState(() {
             _chats = state.chats;
+
+            try {
+              _chats.sort(
+                (a, b) => DateTime.fromMillisecondsSinceEpoch(
+                        b.chatNodes.last.timeStampInMillis)
+                    .compareTo(
+                  DateTime.fromMillisecondsSinceEpoch(
+                      a.chatNodes.last.timeStampInMillis),
+                ),
+              );
+            } catch (e) {}
           });
         }
       },
