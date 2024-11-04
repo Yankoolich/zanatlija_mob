@@ -243,7 +243,7 @@ class _ViewCraftState extends State<ViewCraft> {
                                                     color: Color(0xff888888)),
                                               ),
                                               Text(
-                                                "${widget.craft.rate?.toStringAsFixed(1) ?? 0.0}",
+                                                "${widget.craft.rate?.toStringAsFixed(1) ?? 0.0}/5",
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.w400,
                                                     fontSize: 25,

@@ -209,8 +209,8 @@ class _CraftWidgetState extends State<CraftWidget> with AppMixin {
                             ),
                             Text(
                               widget.fullSize == true
-                                  ? 'Skor: ${widget.craft.rate?.toStringAsFixed(1) ?? 0.0}'
-                                  : '${widget.craft.rate?.toStringAsFixed(1) ?? 0.0}',
+                                  ? 'Skor: ${widget.craft.rate?.toStringAsFixed(1) ?? 0.0}/5'
+                                  : '${widget.craft.rate?.toStringAsFixed(1) ?? 0.0}/5',
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
                                 fontSize: widget.fullSize == true ? 25 : 29,
