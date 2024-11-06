@@ -51,7 +51,7 @@ class CommonTextField extends StatefulWidget {
   final List<String> locations;
   final bool disableCopyPaste;
   final bool isRichText;
-  final bool isImagePicker; // New parameter
+  final bool isImagePicker;
 
   const CommonTextField(
     this.title,
@@ -63,7 +63,7 @@ class CommonTextField extends StatefulWidget {
     this.disableCopyPaste = false,
     this.isPriceText = false,
     this.isRichText = false,
-    this.isImagePicker = false, // New parameter
+    this.isImagePicker = false,
     super.key,
   });
 
@@ -124,8 +124,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       setState(() {
-        widget.controller.text =
-            image.path; // Save image path or handle as needed
+        widget.controller.text = image.path;
       });
     }
   }
@@ -148,7 +147,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
             if (widget.disableCopyPaste) {
               FocusScope.of(context).requestFocus(FocusNode());
             } else if (widget.isImagePicker) {
-              _pickImage(); // Trigger image picker
+              _pickImage();
             }
           },
           decoration: InputDecoration(

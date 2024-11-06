@@ -14,10 +14,9 @@ class UserPreferences {
     _prefs ??= await SharedPreferences.getInstance();
   }
 
-  // Save user credentials
   Future<void> saveUserCredentials(String username, String password) async {
     await _prefs?.setString('username', username);
-    await _prefs?.setString('password', password); // Consider encrypting this
+    await _prefs?.setString('password', password);
   }
 
   String? getUsername() {
