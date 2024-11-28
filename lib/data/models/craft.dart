@@ -7,7 +7,6 @@ enum CraftCategory {
 }
 
 class Craft {
-  final String id;
   final String userId;
   final String craftsmanName;
   final String craftName;
@@ -15,11 +14,12 @@ class Craft {
   final int price;
   final String description;
   String? imageUrl;
+  String id;
   final double? rate;
 
   Craft({
     required this.userId,
-    required this.id,
+    this.id = '',
     required this.craftsmanName,
     required this.craftName,
     required this.description,

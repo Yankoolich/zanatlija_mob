@@ -29,6 +29,17 @@ class CraftCubit extends Cubit<CraftState> {
     }
   }
 
+  Future<void> deleteCraft(String craftId) async {
+    emit(CraftLoadingState());
+    try {
+      await firestoreService.deleteCraft(craftId);
+
+      emit(CrafDeleteStateSuccess());
+    } catch (e) {
+      emit(CraftStateError(e.toString()));
+    }
+  }
+
   Future<String?> uploadAndGetImageUrl(File file) async {
     emit(CraftLoadingState());
     try {

@@ -37,7 +37,8 @@ class _AddCraftState extends State<AddCraft> with AppMixin {
             showLoadingDialog(context);
           } else if (state is CraftStateError) {
             showSnackbarWithTitle(state.error, context);
-          } else if (state is CrafAddNewJobSuccess) {
+          } else if (state is CrafAddNewJobSuccess ||
+              state is CrafDeleteStateSuccess) {
             AutoRouter.of(context).maybePop();
             BlocProvider.of<CraftCubit>(context).getCraftListFromDatabase(
                 BlocProvider.of<UserBloc>(context).state.user!);
@@ -130,7 +131,6 @@ class _AddCraftState extends State<AddCraft> with AppMixin {
                           final randomRate = Random();
                           final randomDouble = 1 + randomRate.nextDouble() * 4;
                           final craft = Craft(
-                            id: UniqueKey().hashCode.toString(),
                             userId: user!.phoneNumber,
                             craftsmanName: username ?? '',
                             craftName: _categoriesController.text,

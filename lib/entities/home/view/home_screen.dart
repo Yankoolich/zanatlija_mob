@@ -217,6 +217,7 @@ class _HomePageState extends State<HomePage> with AppMixin {
                   } else if (state is CraftLoadingState) {
                     showLoadingDialog(context);
                   } else if (state is CraftDownloadSuccess) {
+                    _craftList.clear();
                     setState(() {
                       _craftList = state.crafts;
                     });
@@ -360,12 +361,28 @@ class _HomeState extends State<_Home> {
           ),
           SizedBox(height: 15),
           SizedBox(height: 15),
-          Text(
-            'Lista zanata',
-            style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w600,
-                color: Color(0xff1E1E1E)),
+          Row(
+            children: [
+              Text(
+                'Lista zanata',
+                style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff1E1E1E)),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Expanded(
+                child: CommonActionButton(
+                    onAction: () {
+                      BlocProvider.of<CraftCubit>(context)
+                          .getCraftListFromDatabase(
+                              BlocProvider.of<UserBloc>(context).state.user!);
+                    },
+                    title: 'Osveži'),
+              )
+            ],
           ),
           SizedBox(height: 15),
           Expanded(

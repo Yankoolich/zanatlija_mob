@@ -119,11 +119,12 @@ class FirestoreService with AppMixin {
           firestoreInstance.collection(kUserCollection);
       final craftCollectionReference =
           firestoreInstance.collection(kCraftCollection);
-
-      user.myJobs?.add(craft.id);
+      final id = craftCollectionReference.doc().id;
+      user.myJobs?.add(id);
+      craft.id = id;
       await Future.wait([
         userCollectionReference.doc(user.phoneNumber).update(user.toJson()),
-        craftCollectionReference.doc().set(craft.toJson())
+        craftCollectionReference.doc(id).set(craft.toJson())
       ]);
     } catch (error) {}
   }
@@ -174,6 +175,34 @@ class FirestoreService with AppMixin {
           firestoreInstance.collection(kChatCollection);
 
       await userCollectionReference.doc(chat.id).update(chat.toJson());
+    } catch (error) {}
+  }
+
+  Future<void> deleteCraft(String craftId) async {
+    try {
+      final craftCollectionRef = firestoreInstance.collection(kCraftCollection);
+      final userCollectionRef = firestoreInstance.collection(kUserCollection);
+      final savedCraftsQuerySnapshot = await userCollectionRef
+          .where('savedCrafts', arrayContains: craftId)
+          .get();
+
+      //remove all savedCrafts
+      for (final doc in savedCraftsQuerySnapshot.docs) {
+        final userFromDoc = User.fromJson(doc.data());
+        userFromDoc.savedCrafts?.removeWhere((element) => element == craftId);
+        await updateFirestoreUser(userFromDoc);
+      }
+
+      //remove myJob
+      final myJobsQuerySnapshot =
+          await userCollectionRef.where('myJobs', arrayContains: craftId).get();
+
+      final userFromDoc = User.fromJson(myJobsQuerySnapshot.docs.first.data());
+      userFromDoc.myJobs?.removeWhere((element) => element == craftId);
+      await updateFirestoreUser(userFromDoc);
+
+      //remove craft from collection
+      await craftCollectionRef.doc(craftId).delete();
     } catch (error) {}
   }
 

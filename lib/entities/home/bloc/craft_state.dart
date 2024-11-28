@@ -18,6 +18,8 @@ final class CraftLoadingState extends CraftState {}
 
 final class CrafAddNewJobSuccess extends CraftState {}
 
+final class CrafDeleteStateSuccess extends CraftState {}
+
 final class CrafStateSuccess extends CraftState {}
 
 final class CrafAddNewJobError extends CraftStateError {
