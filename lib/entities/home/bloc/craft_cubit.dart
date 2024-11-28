@@ -22,7 +22,7 @@ class CraftCubit extends Cubit<CraftState> {
     emit(CraftLoadingState());
     try {
       final crafts = await firestoreService.getAllCrafts(user);
-
+      await Future.delayed(const Duration(milliseconds: 500));
       emit(CraftDownloadSuccess(crafts));
     } catch (e) {
       emit(CraftStateError(e.toString()));

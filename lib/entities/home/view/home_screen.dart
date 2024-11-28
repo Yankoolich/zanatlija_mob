@@ -362,6 +362,7 @@ class _HomeState extends State<_Home> {
           SizedBox(height: 15),
           SizedBox(height: 15),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
                 'Lista zanata',
@@ -373,15 +374,23 @@ class _HomeState extends State<_Home> {
               SizedBox(
                 width: 5,
               ),
-              Expanded(
-                child: CommonActionButton(
-                    onAction: () {
-                      BlocProvider.of<CraftCubit>(context)
-                          .getCraftListFromDatabase(
-                              BlocProvider.of<UserBloc>(context).state.user!);
-                    },
-                    title: 'Osveži'),
-              )
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context).cardColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: IconButton(
+                      color: Colors.white,
+                      onPressed: () {
+                        BlocProvider.of<CraftCubit>(context)
+                            .getCraftListFromDatabase(
+                                BlocProvider.of<UserBloc>(context).state.user!);
+                      },
+                      icon: Icon(Icons.refresh)),
+                ),
+              ),
             ],
           ),
           SizedBox(height: 15),
