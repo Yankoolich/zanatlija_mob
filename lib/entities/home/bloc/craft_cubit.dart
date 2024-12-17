@@ -7,10 +7,11 @@ import 'package:zanatlija_app/data/models/craft.dart';
 import 'package:zanatlija_app/data/models/user.dart';
 import 'package:zanatlija_app/data/services/firestore_service.dart';
 import 'package:zanatlija_app/data/services/storage_service.dart';
+import 'package:zanatlija_app/utils/app_mixin.dart';
 
 part 'craft_state.dart';
 
-class CraftCubit extends Cubit<CraftState> {
+class CraftCubit extends Cubit<CraftState> with AppMixin {
   final FirestoreService firestoreService;
   final StorageService storageService;
   CraftCubit(
@@ -19,7 +20,6 @@ class CraftCubit extends Cubit<CraftState> {
   ) : super(CraftInitial());
 
   Future<void> getCraftListFromDatabase(User user) async {
-    emit(CraftLoadingState());
     try {
       final crafts = await firestoreService.getAllCrafts(user);
       await Future.delayed(const Duration(milliseconds: 500));
@@ -30,7 +30,6 @@ class CraftCubit extends Cubit<CraftState> {
   }
 
   Future<void> deleteCraft(String craftId) async {
-    emit(CraftLoadingState());
     try {
       await firestoreService.deleteCraft(craftId);
 
@@ -41,7 +40,6 @@ class CraftCubit extends Cubit<CraftState> {
   }
 
   Future<String?> uploadAndGetImageUrl(File file) async {
-    emit(CraftLoadingState());
     try {
       final image = await storageService.uploadImage(file);
       if (image == null) {
@@ -57,7 +55,6 @@ class CraftCubit extends Cubit<CraftState> {
   }
 
   Future<void> addNewJob(Craft craft, User user) async {
-    emit(CraftLoadingState());
     try {
       await firestoreService.addCraft(craft, user);
       emit(CrafAddNewJobSuccess());

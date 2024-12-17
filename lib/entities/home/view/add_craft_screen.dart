@@ -32,9 +32,7 @@ class _AddCraftState extends State<AddCraft> with AppMixin {
     return Scaffold(
       body: BlocListener<CraftCubit, CraftState>(
         listener: (context, state) {
-          hideLoadingDialog(context);
           if (state is CraftLoadingState) {
-            showLoadingDialog(context);
           } else if (state is CraftStateError) {
             showSnackbarWithTitle(state.error, context);
           } else if (state is CrafAddNewJobSuccess ||
@@ -42,6 +40,7 @@ class _AddCraftState extends State<AddCraft> with AppMixin {
             AutoRouter.of(context).maybePop();
             BlocProvider.of<CraftCubit>(context).getCraftListFromDatabase(
                 BlocProvider.of<UserBloc>(context).state.user!);
+            hideLoading(context);
           }
         },
         child: Container(
@@ -140,7 +139,7 @@ class _AddCraftState extends State<AddCraft> with AppMixin {
                             imageUrl: imageUrl,
                             rate: randomDouble,
                           );
-
+                          showLoading(context);
                           craftCubit.addNewJob(craft, user);
                         },
                         title: 'Dodaj',

@@ -66,13 +66,13 @@ class _ViewCraftState extends State<ViewCraft> with AppMixin {
             IconButton(
               icon: const Icon(
                 Icons.delete,
-                color: Colors.white,
+                color: Colors.red,
                 size: 30,
               ),
               onPressed: () {
+                showLoading(context);
                 BlocProvider.of<CraftCubit>(context)
                     .deleteCraft(widget.craft.id);
-                AutoRouter.of(context).maybePop();
               },
             ),
         ],
@@ -89,15 +89,14 @@ class _ViewCraftState extends State<ViewCraft> with AppMixin {
       ),
       body: BlocListener<CraftCubit, CraftState>(
         listener: (context, state) {
-          hideLoadingDialog(context);
-          if (state is CraftLoadingState) {
-            showLoadingDialog(context);
-          } else if (state is CraftStateError) {
+          if (state is CraftStateError) {
             showSnackbarWithTitle(state.error, context);
+            hideLoading(context);
           } else if (state is CrafDeleteStateSuccess) {
             AutoRouter.of(context).maybePop();
             BlocProvider.of<CraftCubit>(context).getCraftListFromDatabase(
                 BlocProvider.of<UserBloc>(context).state.user!);
+            hideLoading(context);
           }
         },
         child: Container(

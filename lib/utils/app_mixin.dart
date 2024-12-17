@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zanatlija_app/utils/cubit/loading_cubit.dart';
 
 mixin AppMixin<T extends StatefulWidget> {
-  Future<void>? _dialogFuture;
-
   void hideKeyboard(BuildContext context) {
     FocusScope.of(context).unfocus();
   }
@@ -18,35 +18,18 @@ mixin AppMixin<T extends StatefulWidget> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(title)));
   }
 
-  void showLoadingDialog(BuildContext context) {
-    _dialogFuture = showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const AlertDialog(
-          content: Row(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text("Loading..."),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void hideLoadingDialog(BuildContext context) {
-    if (_dialogFuture != null) {
-      Navigator.of(context).pop();
-      _dialogFuture = null;
-    }
-  }
-
   String getHashedPassword(String text) {
     final bytes = utf8.encode(text);
     final digest = sha256.convert(bytes);
     return digest.toString();
+  }
+
+  void showLoading(BuildContext context) {
+    BlocProvider.of<LoadingCubit>(context).showLoading();
+  }
+
+  void hideLoading(BuildContext context) {
+    BlocProvider.of<LoadingCubit>(context).hideLoading();
   }
 
   Widget animatedChildSwitcher({

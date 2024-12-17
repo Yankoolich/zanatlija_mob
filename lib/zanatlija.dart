@@ -5,6 +5,7 @@ import 'package:zanatlija_app/entities/home/bloc/craft_cubit.dart';
 import 'package:zanatlija_app/entities/login/bloc/user_bloc.dart';
 import 'package:zanatlija_app/navigation/router.dart';
 import 'package:zanatlija_app/utils/app_mixin.dart';
+import 'package:zanatlija_app/utils/cubit/loading_cubit.dart';
 import 'package:zanatlija_app/utils/theme_manager.dart';
 
 class ZanatlijaApp extends StatefulWidget {
@@ -16,12 +17,37 @@ class ZanatlijaApp extends StatefulWidget {
 
 class _ZanatlijaAppState extends State<ZanatlijaApp> with AppMixin {
   final AppRouter _appRouter = AppRouter();
+  bool _showDialog = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
     BlocProvider.of<UserBloc>(context).close();
     BlocProvider.of<CraftCubit>(context).close();
+    BlocProvider.of<LoadingCubit>(context).close();
     super.dispose();
+  }
+
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("Loading..."),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -37,16 +63,32 @@ class _ZanatlijaAppState extends State<ZanatlijaApp> with AppMixin {
               theme: theme,
               builder: (context, child) {
                 return MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                        value: BlocProvider.of<UserBloc>(context)),
-                    BlocProvider.value(
-                        value: BlocProvider.of<ChatBloc>(context)),
-                    BlocProvider.value(
-                        value: BlocProvider.of<CraftCubit>(context)),
-                  ],
-                  child: child!,
-                );
+                    providers: [
+                      BlocProvider.value(
+                          value: BlocProvider.of<UserBloc>(context)),
+                      BlocProvider.value(
+                          value: BlocProvider.of<ChatBloc>(context)),
+                      BlocProvider.value(
+                          value: BlocProvider.of<CraftCubit>(context)),
+                      BlocProvider.value(
+                          value: BlocProvider.of<LoadingCubit>(context)),
+                    ],
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        child!,
+                        BlocListener<LoadingCubit, bool>(
+                          child: _showDialog
+                              ? CircularProgressIndicator()
+                              : SizedBox(),
+                          listener: (context, isLoading) {
+                            setState(() {
+                              _showDialog = isLoading;
+                            });
+                          },
+                        ),
+                      ],
+                    ));
               });
         });
   }

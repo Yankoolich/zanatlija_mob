@@ -47,6 +47,7 @@ dependencies:
   firebase_storage: ^11.2.1
   chat_bubbles: ^1.6.0
   shared_preferences: ^2.0.6
+  get_it: ^7.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

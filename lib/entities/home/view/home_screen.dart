@@ -30,9 +30,12 @@ class _HomePageState extends State<HomePage> with AppMixin {
   late User _user;
   @override
   void initState() {
+    showLoading(context);
     _user = BlocProvider.of<UserBloc>(context).state.user!;
-    BlocProvider.of<CraftCubit>(context).getCraftListFromDatabase(_user);
-    BlocProvider.of<ChatBloc>(context).add(GetChatsForUserEvent(_user));
+    Future.delayed(Duration(seconds: 1)).then((value) {
+      BlocProvider.of<CraftCubit>(context).getCraftListFromDatabase(_user);
+      BlocProvider.of<ChatBloc>(context).add(GetChatsForUserEvent(_user));
+    });
     super.initState();
   }
 
@@ -211,16 +214,17 @@ class _HomePageState extends State<HomePage> with AppMixin {
               },
               child: BlocListener<CraftCubit, CraftState>(
                 listener: (context, state) {
-                  hideLoadingDialog(context);
                   if (state is CraftStateError) {
                     showSnackbarWithTitle(state.error, context);
-                  } else if (state is CraftLoadingState) {
-                    showLoadingDialog(context);
+                    hideLoading(context);
                   } else if (state is CraftDownloadSuccess) {
                     _craftList.clear();
                     setState(() {
                       _craftList = state.crafts;
                     });
+                    hideLoading(context);
+                  } else if (state is CrafDeleteStateSuccess) {
+                    hideLoading(context);
                   }
                 },
                 child: _currentIndex == 0
@@ -249,7 +253,7 @@ class _Home extends StatefulWidget {
   State<_Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<_Home> {
+class _HomeState extends State<_Home> with AppMixin {
   final TextEditingController _searchController = TextEditingController();
   List<Craft> _filteredCrafts = [];
 
@@ -384,6 +388,7 @@ class _HomeState extends State<_Home> {
                   child: IconButton(
                       color: Colors.white,
                       onPressed: () {
+                        showLoading(context);
                         BlocProvider.of<CraftCubit>(context)
                             .getCraftListFromDatabase(
                                 BlocProvider.of<UserBloc>(context).state.user!);
@@ -646,6 +651,7 @@ class _ChatsState extends State<_Chats> with AppMixin {
   }
 
   void _fetchChats() {
+    hideLoading(context);
     BlocProvider.of<ChatBloc>(context).add(
       GetChatsForUserEvent(BlocProvider.of<UserBloc>(context).state.user!),
     );
@@ -686,12 +692,10 @@ class _ChatsState extends State<_Chats> with AppMixin {
   Widget build(BuildContext context) {
     return BlocListener<ChatBloc, ChatState>(
       listener: (context, state) {
-        hideLoadingDialog(context);
         if (state is ChattStateError) {
           showSnackbarWithTitle(state.error, context);
-        } else if (state is ChatLoadingState) {
-          showLoadingDialog(context);
-        }
+          hideLoading(context);
+        } else if (state is ChatLoadingState) {}
         if (state is GetAllChatsForUserSuccess) {
           setState(() {
             _chats = state.chats;
@@ -705,6 +709,7 @@ class _ChatsState extends State<_Chats> with AppMixin {
                       a.chatNodes.last.timeStampInMillis),
                 ),
               );
+              hideLoading(context);
             } catch (e) {}
           });
         }
